@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Sage - Medical Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2em; background: #f4f4f9; }
+    #chatbox { width: 100%; max-width: 600px; margin: auto; }
+    #messages { border: 1px solid #ccc; padding: 1em; height: 400px; overflow-y: auto; background: white; }
+    .msg { margin-bottom: 1em; }
+    .user { text-align: right; }
+    .bot { text-align: left; color: #00796b; }
+    input, button { padding: 0.5em; font-size: 1em; }
+    #inputArea { display: flex; gap: 0.5em; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <div id="chatbox">
+    <h1>Dr. Sage</h1>
+    <div id="messages"></div>
+    <div id="inputArea">
+      <input type="text" id="userInput" placeholder="Ask Dr. Sage..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+
+    function addMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'msg ' + sender;
+      msg.textContent = text;
+      messagesDiv.appendChild(msg);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const userText = input.value.trim();
+      if (!userText) return;
+      addMessage('user', userText);
+      input.value = '';
+
+      // Static response example (standalone)
+      const response = "Hello, I’m Dr. Sage. I combine elite clinical insight with natural healing wisdom. Would you like a conventional approach, a natural healing route, or a blend of both?";
+      addMessage('bot', response);
+
+      // Uncomment below to use OpenAI API (you must include your API key)
+      /*
+      const apiKey = 'YOUR_API_KEY';
+      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-4',
+          messages: [
+            { role: 'system', content: 'You are Dr. Sage, a world-renowned omniscient medical guide...' },
+            { role: 'user', content: userText }
+          ]
+        })
+      });
+      const data = await res.json();
+      addMessage('bot', data.choices[0].message.content);
+      */
+    }
+  </script>
+</body>
+</html>
