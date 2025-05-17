@@ -27,6 +27,13 @@
 
   <script>
     const messagesDiv = document.getElementById('messages');
+    const apiKey = 'YOUR_API_KEY'; // Replace with your OpenAI API key
+    let conversation = [
+      {
+        role: "system",
+        content: "You are Dr. Sage, a world-renowned omniscient medical guide. Provide precise, calming, and informed responses using either conventional medicine, natural remedies, or both as preferred by the user."
+      }
+    ];
 
     function addMessage(sender, text) {
       const msg = document.createElement('div');
@@ -43,13 +50,8 @@
       addMessage('user', userText);
       input.value = '';
 
-      // Static response example (standalone)
-      const response = "Hello, I’m Dr. Sage. I combine elite clinical insight with natural healing wisdom. Would you like a conventional approach, a natural healing route, or a blend of both?";
-      addMessage('bot', response);
+      conversation.push({ role: 'user', content: userText });
 
-      // Uncomment below to use OpenAI API (you must include your API key)
-      /*
-      const apiKey = 'YOUR_API_KEY';
       const res = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -58,15 +60,14 @@
         },
         body: JSON.stringify({
           model: 'gpt-4',
-          messages: [
-            { role: 'system', content: 'You are Dr. Sage, a world-renowned omniscient medical guide...' },
-            { role: 'user', content: userText }
-          ]
+          messages: conversation
         })
       });
+
       const data = await res.json();
-      addMessage('bot', data.choices[0].message.content);
-      */
+      const reply = data.choices[0].message.content;
+      conversation.push({ role: 'assistant', content: reply });
+      addMessage('bot', reply);
     }
   </script>
 </body>
